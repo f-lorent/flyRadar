@@ -8,6 +8,8 @@
 #include "../librairies/cJSON.h"
 #include "../include/parse.h"
 
+#include <string.h>
+
 typedef struct {
     int time;
     states_t states;
@@ -33,9 +35,9 @@ void parseStates(cJSON *states, states_t *output) {
             cJSON *on_ground = cJSON_GetArrayItem(state, 8);
             cJSON *velocity = cJSON_GetArrayItem(state, 9);
 
-            output[i].icao24 = icao24->valuestring;
-            output[i].callsign = callsign->valuestring;
-            output[i].origin_country = origin_country->valuestring;
+            output[i].icao24 = strdup(icao24->valuestring);
+            output[i].callsign = strdup(callsign->valuestring);
+            output[i].origin_country = strdup(origin_country->valuestring);
             output[i].time_position = time_position->valueint;
             output[i].longitude = longitude->valuedouble;
             output[i].latitude = latitude->valuedouble;
@@ -47,15 +49,16 @@ void parseStates(cJSON *states, states_t *output) {
 }
 
 
-void parse(const char *data) {
+parse_t parse(const char *data) {
+    parse_t output;
     cJSON *root = cJSON_Parse(data);
     cJSON *time = cJSON_GetObjectItem(root, "time");
     cJSON *states = cJSON_GetObjectItem(root, "states");
 
-    states_t *statesArray = initMalloc(states);
-    parseStates(states, statesArray);
-    printf("%d\n", statesArray[0].on_ground);
+    output.size = cJSON_GetArraySize(states);
+    output.states = initMalloc(states);
+    parseStates(states, output.states);
 
-    free(statesArray);
     cJSON_Delete(root);
+    return output;
 }

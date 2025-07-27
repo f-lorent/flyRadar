@@ -20,6 +20,7 @@ typedef enum {
 
 void stateMachine(const char *cURL) {
     static struct memory output;
+    static parse_t stateOutput;
     static state_e state = INIT;
     static const char *url;
 
@@ -44,7 +45,7 @@ void stateMachine(const char *cURL) {
                 break;
 
             case PARSE:
-                parse(output.response);
+                stateOutput = parse(output.response);
                 state = ANALYZE;
                 break;
 
@@ -62,6 +63,18 @@ void stateMachine(const char *cURL) {
                     free(output.response);
                     output.response = NULL;
                 }
+                if (stateOutput.states != NULL && stateOutput.size != 0) {
+                    int arraySize = stateOutput.size;
+                    for (int i = 0; i < arraySize; i++) {
+                        free(stateOutput.states[i].icao24);
+                        free(stateOutput.states[i].callsign);
+                        free(stateOutput.states[i].origin_country);
+                    }
+                    free(stateOutput.states);
+                    stateOutput.states = NULL;
+                    stateOutput.size = 0;
+                }
+
                 curl_global_cleanup();
                 printf("========flyRADAR========\n");
                 state = DONE;

@@ -20,8 +20,13 @@ typedef struct {
     float velocity;
 }states_t;
 
+typedef struct {
+    states_t *states;
+    int size;
+} parse_t;
+
 states_t *initMalloc(cJSON *states);
 
-void parse(const char *data);
+parse_t parse(const char *data);
 
 #endif //PARSE_H
