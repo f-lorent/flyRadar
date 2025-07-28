@@ -7,6 +7,7 @@
 #include "../include/parse.h"
 
 #include "../include/requestAPI.h"
+#include "../include/analyze.h""
 
 typedef enum {
     INIT = 0,
@@ -50,6 +51,9 @@ void stateMachine(const char *cURL) {
                 break;
 
             case ANALYZE:
+                // In coding
+                //readCSV();
+                analyze(&stateOutput);
                 state = FINISH;
                 break;
 

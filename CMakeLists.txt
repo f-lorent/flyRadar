@@ -11,9 +11,15 @@ add_executable(flyRadar src/main.c
         include/logic.h
         include/parse.h
         librairies/cJSON.c
+        src/analyze/analyze.c
+        src/analyze/cities/cities.c
+        src/analyze/cities/readCSV.c
+        include/readCSV.h
+        include/analyze.h
 )
 
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 target_link_libraries(flyRadar ${CURL_LIBRARIES})
 
+target_link_libraries(flyRadar m)
