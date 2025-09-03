@@ -16,10 +16,16 @@ add_executable(flyRadar src/main.c
         src/analyze/cities/readCSV.c
         include/readCSV.h
         include/analyze.h
+        src/analyze/nCursePrint.c
+        include/nCursePrint.h
 )
 
 find_package(CURL REQUIRED)
 include_directories(${CURL_INCLUDE_DIR})
 target_link_libraries(flyRadar ${CURL_LIBRARIES})
+
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
+target_link_libraries(flyRadar ${CURSES_LIBRARIES})
 
 target_link_libraries(flyRadar m)

@@ -9,22 +9,24 @@
 
 #include <stdio.h>
 
+#include "../../include/nCursePrint.h"
+
 #define RAYON_EARTH 6371.0
-#define TRESHOLD 10.0
+#define TRESHOLD 15.0
 
 static cityInfos_t saumur =
     {
-    "Saumur",
-    "Saumur",
-    47.2600,
-    -0.0769,
+    "Paris",
+    "Paris",
+    48.8567,
+    2.3522,
     "France",
     "FR",
     "FRA",
-    "Pays de la Loire",
-    "minor",
-    26074,
-    1250940567
+    "Île-de-France",
+    "primary",
+    11060000,
+    1250015082
     };
 
 double angularDistance(double lat1, double lat2, double lon1, double lon2) {
@@ -42,8 +44,8 @@ void analyze(const parse_t * parse) {
     for (int i = 0; i < size; i++) {
         double distance = angularDistance(saumur.lat, parse->states[i].latitude, saumur.lng, parse->states[i].longitude);
         if (distance < TRESHOLD) {
-            printf("Callsign : %s \nlatitude : %f\nlongitude %f\n\n",
-                   parse->states[i].callsign, parse->states[i].latitude, parse->states[i].longitude
+            printf("Callsign : %s \nProvenance : %s\nVitesse %f\n\n",
+                   parse->states[i].callsign, parse->states[i].origin_country, parse->states[i].velocity
             );
         }
     }
